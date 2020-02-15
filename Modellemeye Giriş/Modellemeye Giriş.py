@@ -1,5 +1,18 @@
-#!/usr/bin/env python
-# coding: utf-8
+# -*- coding: utf-8 -*-
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,py:light
+#     text_representation:
+#       extension: .py
+#       format_name: light
+#       format_version: '1.5'
+#       jupytext_version: 1.3.3
+#   kernelspec:
+#     display_name: Python 3
+#     language: python
+#     name: python3
+# ---
 
 # # Modellemeye Giriş
 
@@ -23,9 +36,6 @@
 
 # ### 1.1 Örnek Model (Daisy Firması Wozac Ürünü)
 
-# In[ ]:
-
-
 """
 T-Temperature
 P-Pressure
@@ -35,14 +45,8 @@ A,B,C-Mixtures
 """
 
 
-# In[17]:
-
-
 def objfunc1(V,T,P,A,B,C):
     return 300+0.8*V+0.01*P+0.06*T+0.001*T*P-0.01*T*T-0.001*P*P+11.7*A+9.4*B+16.4*C+19*A*B+11.4*A*C-9.6*B*C
-
-
-# In[23]:
 
 
 def checkFeasible(V,T,P,A,B,C):
@@ -63,17 +67,9 @@ def checkFeasible(V,T,P,A,B,C):
     return meets_constraints
 
 
-# In[19]:
-
-
 print("Fizibil :",checkFeasible(5,100,200,0.294,0,0.706))
 
-
-# In[20]:
-
-
 print("Amaç Fonksiyonu = ",objfunc1(5,100,200,0.294,0,0.706))
-
 
 # ### Statik ve Dinamik Modeller
 
@@ -104,18 +100,18 @@ print("Amaç Fonksiyonu = ",objfunc1(5,100,200,0.294,0,0.706))
 
 # <strong>Amaçlar :  </strong><br>A) Çalışan sayısını minimize etmek<br>B) Satış miktarını maksimize etmek<br><br>
 # <strong>Amaç <i>(MAKS)</i> = </strong> - Ödeme * Çalışan Sayısı + kar * müşteri
-# 
+#
 # <u><i>Amaç fonksiyonunun bu şekilde olduğunu varsayarsak modelin lineer olduğunu söyleyebiliriz </i></u>
 
 # #### İlişkiler:
 # 1.Müşteri sayısı arttıkça çalışan sayısı artar.
-# 
+#
 # Örneğin, 
 # (çalışan sayısı) - (müşteri sayısı) * kar = 0
-# 
-# 
-# 
-# 
+#
+#
+#
+#
 
 # <i><u>Müşteri sayısı kontrol edilemeyen bir değişkendir. Bu yüzden kullanacağımız model predictive (öngörülebilen) bir modeldir.</u></i>
 
@@ -124,7 +120,7 @@ print("Amaç Fonksiyonu = ",objfunc1(5,100,200,0.294,0,0.706))
 # <u><i>Müşteri sayısı ve çalışan sayısı tam sayı cinsinden elde edildiğinden tam sayı modelidir.</i></u>
 
 # #### Modellemenin 7 Adımı
-# 
+#
 
 # 1. Problemin Formülasyonu
 # 2. Sistemin Gözlemlenmesi
@@ -133,9 +129,5 @@ print("Amaç Fonksiyonu = ",objfunc1(5,100,200,0.294,0,0.706))
 # 5. Uygun Alternatifin Seçimi
 # 6. Sonuçların Sunulması ve Organizasyon Çalışmasının Sonucu
 # 7. Yerleştirme ve Önerilerin Değerlendirilmesi
-
-# In[ ]:
-
-
 
 
