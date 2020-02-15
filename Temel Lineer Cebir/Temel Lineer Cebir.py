@@ -210,4 +210,164 @@ vektörel_çarpım(A,vektörel_çarpım(B,C))
 
 vektörel_çarpım(vektörel_çarpım(A,B),C)==vektörel_çarpım(A,vektörel_çarpım(B,C))
 
+# ## Problemler
+#
+
+#
+# ### 1. Problem
+
+# +
+
+A=np.array([[1,2,3],[4,5,6],[7,8,9]]);B=np.array([[1,2],[0,-1],[1,2]])
+
+# +
+
+print("A :\n", A,"\n")
+
+
+# -
+
+print("B :\n", B,"\n")
+
+
+# +
+ 
+print("-A :\n", A*-1,"\n")
+
+
+# -
+
+print("3A :\n", A*3,"\n")
+
+
+# +
+
+print("A+2B : \n",A+2*B)
+
+
+# +
+
+print("A transpose : \n" , A.T  )
+
+
+# +
+      
+print("B transpose : \n" , B.T  )
+# -
+
+print("AB transpose : \n" , A.dot(B)  )
+
+print("BA transpose : \n" , B.dot(A)  )
+
+# ### 2. Problem
+
+Bira1=[.5,.3,.2]
+Bira2=[0,.7,.3]
+Bira3=[.1,.3,.6]
+Bira_dict={"Bira1":Bira1
+          ,"Bira2":Bira2,
+          "Bira3":Bira3}
+
+Bira_df=pd.DataFrame(Bira_dict,index=["Bira1","Bira2","Bira3"])
+
+Bira_df
+
+x1=pd.DataFrame({"t1":[0,10,90]},index=["Bira1","Bira2","Bira3"])
+
+x1
+
+Bira_df.shape
+
+x1.shape
+
+y1=Bira_df.dot(x1)
+
+y1
+
+# ### 3.Problem
+
+A=np.array([1,2]) ; B=np.array([[2,3],[4,5]]);C=np.array([[2],[1]])
+vektörel_çarpım(vektörel_çarpım(A,B),C)==vektörel_çarpım(A,vektörel_çarpım(B,C))
+
+# ### 4.Problem
+
+A=np.array([1,2]) ; B=np.array([[2,3],[4,5]])
+print(" (AB)T :\n", vektörel_çarpım(A,B).T)
+print(" BT*AT :\n",vektörel_çarpım(B.T,A.T))
+vektörel_çarpım(A,B).T==vektörel_çarpım(B.T,A.T)
+
+# ### 5.Problem
+
+# +
+A=np.array([[1,2],[2,1]]);
+print(" A : \n",A)
+print(" A.T : \n",A.T)
+
+print(" A==A.T : \n",A==A.T  )
+# -
+
+# a 
+print("A*A.T simetrik \n" , A.dot(A.T)==A.dot(A.T).T)
+
+# b 
+print("A+A.T simetrik \n" , (A+A.T)==(A+A.T).T)
+
+# ### 6.Problem
+
+A=np.array([[1,1],[1,1]]);
+B=np.array([[2,1],[1,2]]);
+
+A.shape
+
+B.shape
+
+n=A.shape[0]
+
+n**3 # Gereken çarpma sayısı
+
+n**3-n**2 # Gereken toplama sayısı
+
+
+# ### 7.Problem
+
+def matriks_izi(A):
+    return np.array([A[i][i] for i in range(len(A))])
+
+
+# a
+matriks_izi(A+B)==(matriks_izi(A)+matriks_izi(B))
+
+# b
+matriks_izi(vektörel_çarpım(A,B))  == matriks_izi(vektörel_çarpım(B,A))
+
+# ## Lineer Denklemlerin Matrisleri
+
+# +
+a11=None;a12=None;a13=None;a21=None;a22=None;a23=None; a31=None;a32=None;a33=None;
+
+A=np.array([[a11,a12,a13],
+[a21,a22,a23],
+[a31,a32,a33]])
+
+# -
+
+A
+
+# +
+x11=None;x12=None;x13=None;x21=None;x22=None;x23=None; x31=None;x32=None;x33=None;
+
+X=np.array([[x11,x12,x13],
+[x21,x22,x23],
+[x31,x32,x33]])
+# -
+
+b1=None;b2=None;b3=None;
+B=np.array([b1,b2,b3])
+
+B
+
+A.dot(X)==B
+
+# <b> X değişken , A ve B sabittir. A*X=B <b>
+
 
