@@ -108,6 +108,7 @@ w=u+v;w
 # + pycharm={"is_executing": false}
 
 
+
 # + pycharm={"is_executing": false}
 def doğru_parçası(c,u,v):
        return c*u + (1 - c)*v
@@ -528,7 +529,179 @@ A[0]=A[0]*33
 # + pycharm={"is_executing": false}
 A
 
-# + pycharm={"is_executing": false}
-# ERO 2  : herhangi bir satırı bir sabit ile çarpmak ve diğer satıra eklemek
+# + pycharm={"is_executing": false, "name": "#%%\n"}
+# ERO 2  : herhangi  diğer satıra eklemek
 A=np.array([[11,-1],[12,1],[1,37]])
+A[2]=A[2]+A[0]*5
 A
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+# ERO 3 : İki satırın yerlerini değiştirmek 
+A=np.array([[11,-1],[12,1],[1,37]])
+Geçici_Değişken=A[0].copy() # .copy() yapmazsak aynı yere kaydediyor.
+A[0]=A[2]
+A[2]=Geçici_Değişken
+A
+
+
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+# x1+x2 = 2  ve 2x1 + 4x2 =7 denklemini bu öğrendiklerimiz ile çözelim.
+
+A=np.array([[1,1,2],[2,4,7.0]],float)
+A
+
+
+
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+A[1]=A[1]/2  # ERO1
+A
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+A[1]=A[1]-A[0]  # ERO2
+A
+
+
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+A[0]=A[0]-A[1]  # ERO2
+A
+
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+[x1,x2]=A[:,2]
+print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
+
+
+
+# -
+
+# ### Gauss Jordan İle Çözüm 
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
+b=np.array([[9],[6],[5]],float) # y 
+
+Ab=np.concatenate((A,b),axis=1) # matrisleri birleştirdik
+
+Ab 
+
+
+
+# +
+Ab1=Ab.copy() # ilk işlem olarak birinci satırın ilk elemanı 1 olacak şekilde ERO işlemi yaptık
+Ab1[0]=Ab1[0]/2
+
+Ab1
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+Ab2=Ab1.copy() # Sonrasında 2 ve 3. satırların ilk sütünlarını 0 olacak şekilde ERO işlemleri yapıyoruz.
+Ab2[1]=Ab2[1]-2*Ab1[0]
+Ab2
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+Ab3=Ab2.copy()
+Ab3[2]=Ab2[2]-Ab2[0]
+
+Ab3
+
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+Ab3[1]=Ab3[1]*(-1/3) # Yukarıda birinci satır için yaptığımız işlemleri 2. ve 3 satırlar için de yapıyoruz.
+
+Ab3[0]=Ab3[0]-Ab3[1]
+
+Ab3[2]=Ab3[2]+2*Ab3[1]
+Ab3
+
+# + pycharm={"name": "#%%\n", "is_executing": false}
+Ab4=Ab3.copy()
+
+Ab4[2]=Ab4[2]*(6/5)
+
+Ab4[0]=Ab4[0]-Ab4[2]*(5/6)
+
+Ab4[1]=Ab4[1]+Ab4[2]*(1/3)
+
+
+# -
+
+np.round(Ab4,6) 
+
+[x1,x2,x3]=Ab4[:,3]
+
+print("x1 : {x1} , x2: {x2} ve x3: {x3} olarak bulunmuştur.".format(x1=x1,x2=x2,x3=x3))
+
+# +
+## Çözümsüz veya Sonsuz Çözümlü Denklemler
+# -
+
+# Örnek 6
+A=np.array([[1,2],[2,4]]);b=np.array([[3],[4]])
+Ab=np.concatenate((A,b),axis=1)
+
+Ab
+
+Ab[1]=Ab[1]-2*Ab[0]
+
+Ab
+
+Ab[1] # x1 ve x2 ye ne verirsek verelim sonuç -2 olmaz. Bu yüzden ÇÖZÜMSÜZDÜR.
+
+# +
+# Eğer A nın bir satırı tamamen 0 oluyor ve buna karşılık b nin o satıra ait değeri 0 olmuyorsa bu sistemin çözümü yoktur.
+
+# +
+# Örnek 7
+# -
+A=np.array([[1,1,0],[0,1,1],[1,2,1]]);b=np.array([[1],[3],[4]]);
+Ab=np.concatenate((A,b),axis=1)
+
+
+Ab[2]=Ab[2]-Ab[0]
+
+Ab
+
+Ab[0]=Ab[0]-Ab[1]
+
+Ab[2]=Ab[2]-Ab[1]
+
+Ab
+
+a=[i for i in range(4)];a.pop(1);a
+
+
+# +
+# Gauss Jordan Metodu 
+
+def GaussJordan(A,b):
+    
+    # Adım 1 : A|b matrisini oluştur. 
+    
+    Ab=np.concatenate((A,b),axis=1)
+    
+    # Adım 2 : İlk satır ilk kolon ile başla 0 a eşit değilse ERO değişimi yaparak ilk sütünü 1 0 0 0 ... 0 haline getir.
+    satır_sayısı=Ab.shape[0]
+    sutun_sayısı=Ab.shape[1]
+    
+    for i in range(satır_sayısı):
+        if not Ab[i][i]==0:
+            Ab[i]=Ab[i]/Ab[i][i]    
+            satır_indisleri=[a for a in range(satır_sayısı)]
+            satır_indisleri.pop(i)
+            for j in satır_indisleri:
+                Ab[j]=Ab[j]-Ab[i]*Ab[j][i]
+
+    return Ab
+
+
+# -
+
+A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
+b=np.array([[9],[6],[5]],float) # y 
+GaussJordan(A,b)
+
+b
+
+
