@@ -681,7 +681,8 @@ def GaussJordan(A,b):
     
     Ab=np.concatenate((A,b),axis=1)
     
-    # Adım 2 : İlk satır ilk kolon ile başla 0 a eşit değilse ERO değişimi yaparak ilk sütünü 1 0 0 0 ... 0 haline getir.
+    # Adım 2a :  İlk satır ilk kolon ile başla 0 a eşit değilse ERO değişimi yaparak ilk sütünü 1 0 0 0 ... 0 haline getir.
+    
     satır_sayısı=Ab.shape[0]
     sutun_sayısı=Ab.shape[1]
     
@@ -692,16 +693,259 @@ def GaussJordan(A,b):
             satır_indisleri.pop(i)
             for j in satır_indisleri:
                 Ab[j]=Ab[j]-Ab[i]*Ab[j][i]
+                
+    # Adım 2b : Eğer ilk kolon ve sütün 0 ise diğer bir sütünla ilk sütünü değiştir.  
+    
+        elif Ab[i][i]==0:
+            Geçici=Ab[i].copy()
+            satır_indisleri=[a for a in range(satır_sayısı)]
+            satır_indisleri.pop(i)
+            a=0
+            for j in satır_indisleri:
+                if a==0:
+                    Ab[i]=Ab[j].copy()
+                    Ab[j]=Geçici
+                
 
     return Ab
+# -
+
+
+
+
+
+# + code_folding=[]
+class DoğrusalDenklem():
+    
+    def __init__(self,A,b):
+        self.denklem=np.concatenate((A,b),axis=1)
+        self.satır_sayısı=self.denklem.shape[0]
+        self.sütün_sayısı=self.denklem.shape[1]
+        print("{n} bilinmeyenli doğrusal denklem sistemi oluşturulmuştur.".format(n=A.shape[1],Ab=self.denklem))
+    
+    def __str__(self):
+        return "Denklem sistemi ----> \n {Ab}".format(Ab=self.denklem)
+    
+    def __len__(self):
+        return self.denklem.shape[0]
+
+    def __del__(self):
+        return  "Doğrusal denklem silinmiştir." 
+    
+    def GaussJordan(self):
+        Ab=self.denklem.copy()
+        satır_sayısı=self.satır_sayısı
+        sutun_sayısı= self.sütün_sayısı
+
+        for i in range(satır_sayısı):
+            
+            if not Ab[i][i]==0:
+                Ab[i]=Ab[i]/Ab[i][i]    
+                satır_indisleri=[a for a in range(satır_sayısı)]
+                satır_indisleri.pop(i)
+                for j in satır_indisleri:
+                    Ab[j]=Ab[j]-Ab[i]*Ab[j][i]
+
+        # Adım 2b : Eğer ilk kolon ve sütün 0 ise diğer bir sütünla ilk sütünü değiştir.  
+
+            elif Ab[i][i]==0:
+                Geçici=Ab[i].copy()
+                satır_indisleri=[a for a in range(satır_sayısı)]
+                satır_indisleri.pop(i)
+                a=0
+                for j in satır_indisleri:
+                    if a==0:
+                        Ab[i]=Ab[j].copy()
+                        Ab[j]=Geçici
+        
+        return Ab
+        
+    
+    def çözüm_durumu(self):
+        çözüm=self.GaussJordan()
+        satır_sayısı=self.satır_sayısı
+        sutun_sayısı= self.sütün_sayısı
+        tekÇözüm=False
+        
+        for i in range(satır_sayısı):
+            if sum(çözüm[i,:sutun_sayısı-1])==0 and çözüm[i,sutun_sayısı-1]!=0:
+                print("Denklem Kümesi Çözümsüzdür.")
+                return "çözümsüz"
+            
+            
+        tek_çözüm=0    
+        for i in range(satır_sayısı):    
+            if sum(çözüm[i,:sutun_sayısı-1])==1:
+                tek_çözüm+=1
+                if tek_çözüm==satır_sayısı:
+                    tekÇözüm=True
+                    print("Denklem Kümesinin Tek Çözümü mevcuttur.")
+                    return "tek"
+
+        for i in range(satır):
+            if sum(örnek_denklem_çözümü[i,:sütün])==0:
+                sonsuz_çözüm=True
+                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+                return "sonsuz"
+            elif tekÇözüm==False:
+                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+                return "sonsuz"
 
 
 # -
 
-A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
-b=np.array([[9],[6],[5]],float) # y 
-GaussJordan(A,b)
+# ### Ana Değişkenler ve Doğrusal Denklemlerde Çözümleri 
 
-b
+# <i> Doğrusal denklem sistemlerini çözdükten sonra eğer bir satırda sadece bir sütünda 1 katsayısı var ve diğer sütünların katsayıları 0 ise bu değişkene <b> esas değişken (BV) </b>  denir.   </i>  <i> Aksi durumdaki değişkenler <b>  esas olmayan  (NBV)</b>  değişkenlerdir  .   </i>
+
+def çözüm_durumu(örnek_denklem_çözümü):
+        çözümsüz=False
+        sonsuz_çözüm=False
+        tek_çözüm=0
+        tekÇözüm=False
+        for i in range(satır):
+            if sum(örnek_denklem_çözümü[i,:sütün-1])==0 and örnek_denklem_çözümü[i,sütün-1]!=0:
+                çözümsüz=True
+                print("Denklem Kümesi Çözümsüzdür.")
+                return "çözümsüz"
+              
+        for i in range(satır):    
+            if sum(örnek_denklem_çözümü[i,:sütün-1])==1:
+                tek_çözüm+=1
+                if tek_çözüm==satır:
+                    print("Denklem Kümesinin Tek Çözümü mevcuttur.")
+                    tekÇözüm=True
+                    return "tek"
+
+        for i in range(satır):
+            if sum(örnek_denklem_çözümü[i,:sütün])==0:
+                sonsuz_çözüm=True
+                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+                return "sonsuz"
+            elif tekÇözüm==False:
+                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+                return "sonsuz"
+            
+
+
+# +
+## Durum 1 
+
+A=np.array([[1,0,0,1],[0,1,0,2],[0,0,1,3],[0,0,0,0],[0,0,0,0]],float)
+b=np.array([[1],[1],[-1],[0],[2]],float)
+# -
+
+örnek_denklem_1=DoğrusalDenklem(A,b)
+
+örnek_denklem_1.GaussJordan()
+
+sonuç=örnek_denklem_1.çözüm_durumu()
+
+print(sonuç)
+
+# +
+# Durum 2
+
+A=np.array([[2,2, 1],[2,-1,2],[1,-1,2]],float)
+b=np.array([[9],[6],[5]],float)
+
+# -
+
+örnek_denklem_2=DoğrusalDenklem(A,b)
+
+örnek_denklem_2.GaussJordan()
+
+sonuç=örnek_denklem_2.çözüm_durumu();
+
+print(sonuç)
+
+# Durum 3 
+A=np.array([[1,0,0,1,1],[0,1,0,2,0],[0,0,1,0,1],[0,0,0,0,0]],float)
+b=np.array([[3],[2],[1],[0]],float)
+
+
+örnek_denklem_3=DoğrusalDenklem(A,b)
+
+örnek_denklem_3.denklem
+
+örnek_denklem_3.GaussJordan()
+
+sonuç=örnek_denklem_3.çözüm_durumu()
+
+sonuç
+
+
+# ### Problemler 
+#
+#
+#
+
+# #### 1-8  Problemler
+
+def problem_çözer(A,b):
+    denklem=DoğrusalDenklem(A,b)
+    print("Çözüm: \n",denklem.GaussJordan(),"\n")
+    print("Çözüm durumu : ",denklem.çözüm_durumu(),"\n")
+
+
+# 1 
+A=np.array([[1,1,0,1],[0,1,1,0],[1,2,1,1]],float)
+b=np.array([[3],[4],[8]],float)
+problem_çözer(A,b)
+
+# 2 
+A=np.array([[1,1,1],[1,2,0]],float)
+b=np.array([[4],[6]],float)
+problem_çözer(A,b)
+
+# 3 
+A=np.array([[1,1],[2,1],[3,2]],float)
+b=np.array([[1],[3],[4]],float)
+problem_çözer(A,b)
+
+# 4 
+A=np.array([[2,-1,1,1],[1,1,1,0]],float)
+b=np.array([[6],[4]],float)
+problem_çözer(A,b)
+
+# 5 
+A=np.array([[1,0,0,1],[0,1,0,2],[0,0,1,.5],[0,0,2,1]],float)
+b=np.array([[5],[5],[1],[3]],float)
+problem_çözer(A,b)
+
+# 6
+A=np.array([[0,2,2 ],[1,2,1 ],[0,1,-1 ]],float)
+b=np.array([[4],[4],[0]],float)
+problem_çözer(A,b)
+
+# 7
+A=np.array([[1,1,0 ],[0,-1,2 ],[0,1,1 ]],float)
+b=np.array([[2],[3],[3]],float)
+problem_çözer(A,b)
+
+# 8
+A=np.array([[1,1,1 ,0],[0,1,2,1 ],[0,0,0,1 ]],float)
+b=np.array([[1],[2],[3]],float)
+problem_çözer(A,b)
+
+# +
+# 9 
+
+A=np.array([[1,1,1 ,0],[0,1,2,1 ],[0,0,0,1 ]],float)
+b=np.array([[1],[2],[3]],float)
+
+değişken_sayısı=A.shape[1]
+# -
+
+bulunabilecek_değişken_sayısı=b.shape[0]
+
+bulunabilecek_değişken_sayısı
+
+değişken_sayısı
+
+if bulunabilecek_değişken_sayısı>değişken_sayısı:
+    print("Tek bir çözüm olma şansı mevcuttur.")
+else:
+    print("Tek bir çözüm olma şansı mevcut değildir.")
 
 
