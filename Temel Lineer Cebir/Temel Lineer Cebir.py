@@ -535,7 +535,7 @@ A=np.array([[11,-1],[12,1],[1,37]])
 A[2]=A[2]+A[0]*5
 A
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 # ERO 3 : İki satırın yerlerini değiştirmek 
 A=np.array([[11,-1],[12,1],[1,37]])
 Geçici_Değişken=A[0].copy() # .copy() yapmazsak aynı yere kaydediyor.
@@ -543,9 +543,20 @@ A[0]=A[2]
 A[2]=Geçici_Değişken
 A
 
+# -
 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+A=np.array([[11,-1],[12,1],[1,37]])
+Geçici_Değişken=A[0] # .copy() yapmazsak aynı yere kaydediyor.
+A[0]=A[2]
+A[2]=Geçici_Değişken
+A
+
+
+
+
+
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 # x1+x2 = 2  ve 2x1 + 4x2 =7 denklemini bu öğrendiklerimiz ile çözelim.
 
 A=np.array([[1,1,2],[2,4,7.0]],float)
@@ -554,22 +565,22 @@ A
 
 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 A[1]=A[1]/2  # ERO1
 A
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 A[1]=A[1]-A[0]  # ERO2
 A
 
 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 A[0]=A[0]-A[1]  # ERO2
 A
 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 [x1,x2]=A[:,2]
 print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
 
@@ -579,7 +590,7 @@ print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
 
 # ### Gauss Jordan İle Çözüm 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
 b=np.array([[9],[6],[5]],float) # y 
 
@@ -587,27 +598,27 @@ Ab=np.concatenate((A,b),axis=1) # matrisleri birleştirdik
 
 Ab 
 
+# -
 
 
-# +
 Ab1=Ab.copy() # ilk işlem olarak birinci satırın ilk elemanı 1 olacak şekilde ERO işlemi yaptık
 Ab1[0]=Ab1[0]/2
-
 Ab1
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 Ab2=Ab1.copy() # Sonrasında 2 ve 3. satırların ilk sütünlarını 0 olacak şekilde ERO işlemleri yapıyoruz.
-Ab2[1]=Ab2[1]-2*Ab1[0]
+Ab2[1]=Ab2[1]-Ab1[1][0]*Ab1[0]
 Ab2
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 Ab3=Ab2.copy()
-Ab3[2]=Ab2[2]-Ab2[0]
+Ab3[2]=Ab2[2]-Ab2[2][0]*Ab2[0]
 
 Ab3
 
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 Ab3[1]=Ab3[1]*(-1/3) # Yukarıda birinci satır için yaptığımız işlemleri 2. ve 3 satırlar için de yapıyoruz.
 
 Ab3[0]=Ab3[0]-Ab3[1]
@@ -615,7 +626,7 @@ Ab3[0]=Ab3[0]-Ab3[1]
 Ab3[2]=Ab3[2]+2*Ab3[1]
 Ab3
 
-# + pycharm={"name": "#%%\n", "is_executing": false}
+# + pycharm={"is_executing": false, "name": "#%%\n"}
 Ab4=Ab3.copy()
 
 Ab4[2]=Ab4[2]*(6/5)
@@ -669,48 +680,77 @@ Ab[2]=Ab[2]-Ab[1]
 
 Ab
 
-a=[i for i in range(4)];a.pop(1);a
+[i for i in range(5)]
 
 
 # +
 # Gauss Jordan Metodu 
 
 def GaussJordan(A,b):
+    """ 
+    Gauss Jordan methodu ile satır işlemleri yapıp, değişkenleri 
+    hesaplar.Öncelikle katsayı matrisi ile sonuç matrisi birleştirilir.
+    İlk olarak köşegen elemanın 0'a eşitliği kontrol edilir.
+    Daha sonrasında ona ait sütündaki diğer elemanlar 0 olacak 
+    şekilde satır işlemleri yapılır. Bütün satırların üzerinden 
+    bu yöntemle geçilir. 
+    
+    """
     
     # Adım 1 : A|b matrisini oluştur. 
     
     Ab=np.concatenate((A,b),axis=1)
-    
-    # Adım 2a :  İlk satır ilk kolon ile başla 0 a eşit değilse ERO değişimi yaparak ilk sütünü 1 0 0 0 ... 0 haline getir.
-    
     satır_sayısı=Ab.shape[0]
     sutun_sayısı=Ab.shape[1]
     
-    for i in range(satır_sayısı):
-        if not Ab[i][i]==0:
-            Ab[i]=Ab[i]/Ab[i][i]    
-            satır_indisleri=[a for a in range(satır_sayısı)]
-            satır_indisleri.pop(i)
-            for j in satır_indisleri:
-                Ab[j]=Ab[j]-Ab[i]*Ab[j][i]
-                
-    # Adım 2b : Eğer ilk kolon ve sütün 0 ise diğer bir sütünla ilk sütünü değiştir.  
-    
-        elif Ab[i][i]==0:
+    for i in range(satır_sayısı):         
+        if Ab[i][i]==0:
             Geçici=Ab[i].copy()
-            satır_indisleri=[a for a in range(satır_sayısı)]
-            satır_indisleri.pop(i)
-            a=0
-            for j in satır_indisleri:
-                if a==0:
-                    Ab[i]=Ab[j].copy()
-                    Ab[j]=Geçici
-                
+            satır_indisleri=[a for a in range(i,satır_sayısı) if Ab[a][i]!=0]
+            if satır_indisleri:
+                Ab[i]=Ab[satır_indisleri[0]].copy()
+                Ab[satır_indisleri[0]]=Geçici
+            else:
+                print(str(i)+". satırından sonra işlem yapılamamaktadır")
+                return Ab
+        Ab[i]=Ab[i]/Ab[i][i]    
+        for s in range(satır_sayısı): 
+            if i==s:
+                pass
+            else:
+                Ab[s]=Ab[s]-Ab[i]*Ab[s][i]
 
     return Ab
+# +
+## Durum 1 
+
+A=np.array([[1,0,0,1],[0,1,0,2],[0,0,1,3],[0,0,0,0],[0,0,0,0]],float)
+b=np.array([[1],[1],[-1],[0],[2]],float)
+
+GaussJordan(A,b)
+
+# +
+# Durum 2
+
+A=np.array([[2,2, 1],[2,-1,2],[1,-1,2]],float)
+b=np.array([[9],[6],[5]],float)
+print(np.concatenate((A,b),axis=1))
+GaussJordan(A,b)
 # -
 
 
+# Durum 3 
+A=np.array([[1,0,0,1,1],[0,1,0,2,0],[0,0,1,0,1],[0,0,0,0,0]],float)
+b=np.array([[3],[2],[1],[0]],float)
+print(np.concatenate((A,b),axis=1))
+GaussJordan(A,b)
+
+A=np.array([[0,1,1],[0,2,5],[0,35,1]],float)
+b=np.array([[3],[4],[5]],float)
+
+a=DoğrusalDenklem(A,b)
+
+a.GaussJordan()
 
 
 
@@ -733,99 +773,106 @@ class DoğrusalDenklem():
         return  "Doğrusal denklem silinmiştir." 
     
     def GaussJordan(self):
+        """ 
+        Gauss Jordan methodu ile satır işlemleri yapıp, değişkenleri 
+        hesaplar.Öncelikle katsayı matrisi ile sonuç matrisi birleştirilir.
+        İlk olarak köşegen elemanın 0'a eşitliği kontrol edilir.
+        Daha sonrasında ona ait sütündaki diğer elemanlar 0 olacak 
+        şekilde satır işlemleri yapılır. Bütün satırların üzerinden 
+        bu yöntemle geçilir. 
+
+        """
+
+        # Adım 1 : A|b matrisini oluştur. 
+
         Ab=self.denklem.copy()
-        satır_sayısı=self.satır_sayısı
-        sutun_sayısı= self.sütün_sayısı
+        satır_sayısı=Ab.shape[0]
+        sutun_sayısı=Ab.shape[1]
 
-        for i in range(satır_sayısı):
-            
-            if not Ab[i][i]==0:
-                Ab[i]=Ab[i]/Ab[i][i]    
-                satır_indisleri=[a for a in range(satır_sayısı)]
-                satır_indisleri.pop(i)
-                for j in satır_indisleri:
-                    Ab[j]=Ab[j]-Ab[i]*Ab[j][i]
-
-        # Adım 2b : Eğer ilk kolon ve sütün 0 ise diğer bir sütünla ilk sütünü değiştir.  
-
-            elif Ab[i][i]==0:
+        for i in range(satır_sayısı):         
+            if Ab[i][i]==0:
                 Geçici=Ab[i].copy()
-                satır_indisleri=[a for a in range(satır_sayısı)]
-                satır_indisleri.pop(i)
-                a=0
-                for j in satır_indisleri:
-                    if a==0:
-                        Ab[i]=Ab[j].copy()
-                        Ab[j]=Geçici
-        
+                satır_indisleri=[a for a in range(i,satır_sayısı) if Ab[a][i]!=0]
+                if satır_indisleri:
+                    Ab[i]=Ab[satır_indisleri[0]].copy()
+                    Ab[satır_indisleri[0]]=Geçici
+                else:
+                    print(str(i)+". satırından sonra işlem yapılamamaktadır")
+                    return Ab
+            Ab[i]=Ab[i]/Ab[i][i]    
+            for s in range(satır_sayısı): 
+                if i==s:
+                    pass
+                else:
+                    Ab[s]=Ab[s]-Ab[i]*Ab[s][i]
+
         return Ab
-        
-    
+
     def çözüm_durumu(self):
         çözüm=self.GaussJordan()
         satır_sayısı=self.satır_sayısı
         sutun_sayısı= self.sütün_sayısı
         tekÇözüm=False
         
-        for i in range(satır_sayısı):
-            if sum(çözüm[i,:sutun_sayısı-1])==0 and çözüm[i,sutun_sayısı-1]!=0:
+        for i in range(satır_sayısı):      
+            if all(çözüm[i,:sutun_sayısı-1]==0) and çözüm[i,sutun_sayısı-1]!=0:
                 print("Denklem Kümesi Çözümsüzdür.")
-                return "çözümsüz"
-            
-            
-        tek_çözüm=0    
-        for i in range(satır_sayısı):    
-            if sum(çözüm[i,:sutun_sayısı-1])==1:
-                tek_çözüm+=1
-                if tek_çözüm==satır_sayısı:
-                    tekÇözüm=True
-                    print("Denklem Kümesinin Tek Çözümü mevcuttur.")
-                    return "tek"
+                return "çözümsüz"  
+        
+        if satır_sayısı==(sutun_sayısı-1):
+            i=0
+            while i<satır_sayısı and çözüm[i][i]==1:
+                i+=1
 
-        for i in range(satır):
-            if sum(örnek_denklem_çözümü[i,:sütün])==0:
-                sonsuz_çözüm=True
-                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
-                return "sonsuz"
-            elif tekÇözüm==False:
-                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
-                return "sonsuz"
-
-
+            if i==satır_sayısı:
+                tekÇözüm=True
+                print("Denklem Kümesinin Tek Çözümü mevcuttur.")
+                return "tek"
+        else:
+            print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+            return "sonsuz"
 # -
+
+
+
+
+
+
 
 # ### Ana Değişkenler ve Doğrusal Denklemlerde Çözümleri 
 
 # <i> Doğrusal denklem sistemlerini çözdükten sonra eğer bir satırda sadece bir sütünda 1 katsayısı var ve diğer sütünların katsayıları 0 ise bu değişkene <b> esas değişken (BV) </b>  denir.   </i>  <i> Aksi durumdaki değişkenler <b>  esas olmayan  (NBV)</b>  değişkenlerdir  .   </i>
 
-def çözüm_durumu(örnek_denklem_çözümü):
-        çözümsüz=False
-        sonsuz_çözüm=False
-        tek_çözüm=0
-        tekÇözüm=False
-        for i in range(satır):
-            if sum(örnek_denklem_çözümü[i,:sütün-1])==0 and örnek_denklem_çözümü[i,sütün-1]!=0:
-                çözümsüz=True
-                print("Denklem Kümesi Çözümsüzdür.")
-                return "çözümsüz"
-              
-        for i in range(satır):    
-            if sum(örnek_denklem_çözümü[i,:sütün-1])==1:
-                tek_çözüm+=1
-                if tek_çözüm==satır:
-                    print("Denklem Kümesinin Tek Çözümü mevcuttur.")
-                    tekÇözüm=True
-                    return "tek"
+# + active=""
+# def çözüm_durumu(örnek_denklem_çözümü):
+#         çözümsüz=False
+#         sonsuz_çözüm=False
+#         tek_çözüm=0
+#         tekÇözüm=False
+#         for i in range(satır):
+#             if sum(örnek_denklem_çözümü[i,:sütün-1])==0 and örnek_denklem_çözümü[i,sütün-1]!=0:
+#                 çözümsüz=True
+#                 print("Denklem Kümesi Çözümsüzdür.")
+#                 return "çözümsüz"
+#               
+#         for i in range(satır):    
+#             if sum(örnek_denklem_çözümü[i,:sütün-1])==1:
+#                 tek_çözüm+=1
+#                 if tek_çözüm==satır:
+#                     print("Denklem Kümesinin Tek Çözümü mevcuttur.")
+#                     tekÇözüm=True
+#                     return "tek"
+#
+#         for i in range(satır):
+#             if sum(örnek_denklem_çözümü[i,:sütün])==0:
+#                 sonsuz_çözüm=True
+#                 print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+#                 return "sonsuz"
+#             elif tekÇözüm==False:
+#                 print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
+#                 return "sonsuz"
+# -
 
-        for i in range(satır):
-            if sum(örnek_denklem_çözümü[i,:sütün])==0:
-                sonsuz_çözüm=True
-                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
-                return "sonsuz"
-            elif tekÇözüm==False:
-                print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
-                return "sonsuz"
-            
 
 
 # +
@@ -837,11 +884,17 @@ b=np.array([[1],[1],[-1],[0],[2]],float)
 
 örnek_denklem_1=DoğrusalDenklem(A,b)
 
+örnek_denklem_1.denklem
+
 örnek_denklem_1.GaussJordan()
 
 sonuç=örnek_denklem_1.çözüm_durumu()
 
 print(sonuç)
+
+# Güncellenmiş Gauss Jordan
+GaussJordan(A,b)
+
 
 # +
 # Durum 2
@@ -933,7 +986,7 @@ problem_çözer(A,b)
 
 A=np.array([[1,1,1 ,0],[0,1,2,1 ],[0,0,0,1 ]],float)
 b=np.array([[1],[2],[3]],float)
-
+problem_çözer(A,b)
 değişken_sayısı=A.shape[1]
 # -
 
