@@ -535,7 +535,7 @@ A=np.array([[11,-1],[12,1],[1,37]])
 A[2]=A[2]+A[0]*5
 A
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 # ERO 3 : İki satırın yerlerini değiştirmek 
 A=np.array([[11,-1],[12,1],[1,37]])
 Geçici_Değişken=A[0].copy() # .copy() yapmazsak aynı yere kaydediyor.
@@ -556,7 +556,7 @@ A
 
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 # x1+x2 = 2  ve 2x1 + 4x2 =7 denklemini bu öğrendiklerimiz ile çözelim.
 
 A=np.array([[1,1,2],[2,4,7.0]],float)
@@ -565,22 +565,22 @@ A
 
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 A[1]=A[1]/2  # ERO1
 A
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 A[1]=A[1]-A[0]  # ERO2
 A
 
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 A[0]=A[0]-A[1]  # ERO2
 A
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 [x1,x2]=A[:,2]
 print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
 
@@ -590,7 +590,7 @@ print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
 
 # ### Gauss Jordan İle Çözüm 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
 b=np.array([[9],[6],[5]],float) # y 
 
@@ -606,19 +606,19 @@ Ab1[0]=Ab1[0]/2
 Ab1
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 Ab2=Ab1.copy() # Sonrasında 2 ve 3. satırların ilk sütünlarını 0 olacak şekilde ERO işlemleri yapıyoruz.
 Ab2[1]=Ab2[1]-Ab1[1][0]*Ab1[0]
 Ab2
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 Ab3=Ab2.copy()
 Ab3[2]=Ab2[2]-Ab2[2][0]*Ab2[0]
 
 Ab3
 
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 Ab3[1]=Ab3[1]*(-1/3) # Yukarıda birinci satır için yaptığımız işlemleri 2. ve 3 satırlar için de yapıyoruz.
 
 Ab3[0]=Ab3[0]-Ab3[1]
@@ -626,7 +626,7 @@ Ab3[0]=Ab3[0]-Ab3[1]
 Ab3[2]=Ab3[2]+2*Ab3[1]
 Ab3
 
-# + pycharm={"is_executing": false, "name": "#%%\n"}
+# + pycharm={"name": "#%%\n", "is_executing": false}
 Ab4=Ab3.copy()
 
 Ab4[2]=Ab4[2]*(6/5)
@@ -1000,5 +1000,7 @@ if bulunabilecek_değişken_sayısı>değişken_sayısı:
     print("Tek bir çözüm olma şansı mevcuttur.")
 else:
     print("Tek bir çözüm olma şansı mevcut değildir.")
+
+"Deneme"
 
 
