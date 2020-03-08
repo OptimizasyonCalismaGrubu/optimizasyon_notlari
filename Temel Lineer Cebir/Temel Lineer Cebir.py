@@ -17,6 +17,7 @@
 # + pycharm={"is_executing": false}
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 # + pycharm={"is_executing": false}
 v1=[1,3]
@@ -436,7 +437,7 @@ matriks_izi(A+B)==(matriks_izi(A)+matriks_izi(B))
 matriks_izi(vektörel_çarpım(A,B))  == matriks_izi(vektörel_çarpım(B,A))
 # -
 
-# ## Lineer Denklemlerin Matrisleri
+# # Lineer Denklemlerin Matrisleri
 
 # + pycharm={"is_executing": false}
 a11=None;a12=None;a13=None;a21=None;a22=None;a23=None; a31=None;a32=None;a33=None;
@@ -506,7 +507,7 @@ B=np.array([[4],[6],[8]])
 np.concatenate((A,B), axis=1)
 # -
 
-# ## Gauss-Jordan Metodu ile Lineer Denklem Çözümü
+# # Gauss-Jordan Metodu ile Lineer Denklem Çözümü
 
 # + pycharm={"is_executing": false}
 # Durum 1 : Sistemin çözümü yoktur.
@@ -514,7 +515,7 @@ np.concatenate((A,B), axis=1)
 # Durum 3 : Sistemin sonsuz çözümü vardır.
 # -
 
-# #### Satır Operasyonları (ERO)
+# ## Satır Operasyonları (ERO)
 
 # + pycharm={"is_executing": false}
 # ERO 1  : herhangi bir satırı bir sabit ile çarpmak 
@@ -588,7 +589,7 @@ print("x1 : {x1} ve x2: {x2}".format(x1=x1,x2=x2))
 
 # -
 
-# ### Gauss Jordan İle Çözüm 
+# ## Gauss Jordan İle Çözüm 
 
 # + pycharm={"name": "#%%\n", "is_executing": false}
 A=np.array([[2,2,1],[2,-1,2],[1,-1,2]],float) # Katsayı
@@ -831,6 +832,26 @@ class DoğrusalDenklem():
         else:
             print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
             return "sonsuz"
+        
+    def rank_sayar(self):
+        Ab=self.GaussJordan()
+        say=0
+        satır_sayısı=Ab.shape[0]
+        for i in range(satır_sayısı):
+               if Ab[i][i]==1 and Ab[:,i].sum()==1:
+                    say+=1
+        return say
+    
+    def doğrusal_bağımsız(self):
+        Ab=self.GaussJordan()
+        rank=self.rank_sayar()
+        m=Ab.shape[0]
+        if m==rank:
+            return True
+        elif m>rank:
+            return False
+        else:
+            return "Error"
 # -
 
 
@@ -839,7 +860,7 @@ class DoğrusalDenklem():
 
 
 
-# ### Ana Değişkenler ve Doğrusal Denklemlerde Çözümleri 
+# ##  Ana Değişkenler ve Doğrusal Denklemlerde Çözümleri 
 
 # <i> Doğrusal denklem sistemlerini çözdükten sonra eğer bir satırda sadece bir sütünda 1 katsayısı var ve diğer sütünların katsayıları 0 ise bu değişkene <b> esas değişken (BV) </b>  denir.   </i>  <i> Aksi durumdaki değişkenler <b>  esas olmayan  (NBV)</b>  değişkenlerdir  .   </i>
 
@@ -928,12 +949,10 @@ sonuç=örnek_denklem_3.çözüm_durumu()
 sonuç
 
 
-# ### Problemler 
+# ##  Problemler 
 #
 #
 #
-
-# #### 1-8  Problemler
 
 def problem_çözer(A,b):
     denklem=DoğrusalDenklem(A,b)
@@ -1001,6 +1020,292 @@ if bulunabilecek_değişken_sayısı>değişken_sayısı:
 else:
     print("Tek bir çözüm olma şansı mevcut değildir.")
 
-"Deneme"
+# # Doğrusal Bağımsızlık ve Bağımlılık 
+
+# Bu bölümde doğrusal bağımlı/bağımsız doğrular , matrislerin kertesi(rankı) üzerine çalışacağız. Matrislerin tersi üzerine yapılacak çalışmalar da bu konular önemli olmaktadır.
+
+# +
+# V={v1,v2,v3,......,vk} vektörler kümesi (aynı uzunluğa sahip)
+# -
+
+# <b> Doğrusal kombinasyonda c1*v1+c2*v2+......+ck*vk rastgele sayılardır. </b>
+
+v1=np.array([1,2]);v2=np.array([2,1])
+
+V=np.array([v1,v2])
+
+2*v1-v2==2*V[0]-V[1]  #1
+
+2*V[0]-V[1]==np.array([0,3]) #1
+
+np.array([1,2])+3*np.array([2,1])== 1*V[0]+3*V[1]  #2
+
+# <br><i> * m boyutlu V vektör kümesindeki vektörlerin sıradan doğrusal kombinasyonu 0'a eşitse <b>doğrusal bağımsız </b> dır. </i>
+
+# <br><i> * m boyutlu V vektör kümesindeki vektörlerin sıradan olmayan doğrusal kombinasyonun toplamı 0'a eşitse <b>doğrusal bağımlı</b> dır </i>
+
+# +
+# Örnek 8 
+
+V=np.array([[0,0],[1,0],[0,1]])
+# -
+
+c1=1;
+c1!=0
+
+(c1*V[0]+0*V[1]+0*V[2])==np.array([0,0]) ## Doğrusal bağımlıdır.
+
+# +
+# Örnek 9
+
+V=np.array([[1,0],[0,1]])
+
+c1=0;c2=0
+if c1==0 and c2==0:
+    
+    print("Doğrusal bağımlı:",c1*V[0]+c2*V[1]==np.array([0,0])) 
+
+    
+# Sadece c1=0 ve c2=0 için geçerlidir. Aksi halde doğruluğu sağlayamamaktadırlar. 
+
+# +
+# Örnek 10
+
+V=np.array([[1,2],[2,4]])
+
+c1=2;c2=-1
+
+print("Doğrusal bağımlı:",(c1*V[0]+c2*V[1])==np.array([0,0])) 
+
+
+# -
+
+V=np.array([[1,2],[2,4]])
+for i in range(-100,100):
+    c1=i
+    for j in range(-100,100):
+        c2=j
+        if ((c1*V[0]+c2*V[1])==np.array([0,0])).mean()==1:
+            print("Doğrusal bağımlı: c1={c1} ve c2={c2}".format(c1=c1,c2=c2))
+
+# +
+# Resim 7 
+
+# A
+# Doğrusal Bağımlı
+# Kırmızı  : v2
+# Mavi : v1
+
+v1=[1,1]
+v2=[2,2]
+plt.quiver([0, 0],[0, 0],  [1, 2], [1, 2],color=['b','r'], angles='xy',width=0.015,scale_units='xy', scale=1)
+plt.xlim(-3,3)
+plt.ylim(-3, 3)
+plt.grid(b=True, which='major') 
+plt.show()
+
+# +
+# B
+# Doğrusal Bağımsız
+# Kırmızı  : v2
+# Mavi : v1
+
+v1=[1,1]
+v2=[1,0]
+plt.quiver([0, 0],[0, 0],  [1, 1], [1,0],color=['r','b'], angles='xy',width=0.015, scale_units='xy', scale=1)
+plt.xlim(-1.5,1.5)
+plt.ylim(-1.5, 1.5)
+plt.grid(b=True, which='major') 
+plt.show()
+# -
+
+# ## Matrisin Rankı
+
+# Gauss Jordan metodu bize vektör kümesinin doğrusal bağımlı ya da bağımsız olduğu bilgisini verebilir. 
+
+#  A mXn lik bir matris ise, R={r1,r2,r3,.....,rm} 'den oluşan bir satırlar kümesi olarakta gösterilebilir. 
+
+# <b> A matrisinin rankı R kümesinin en fazla doğrusal bağımsız olan vektör sayısıdır . </b>
+
+# +
+# Örnek 11 
+
+A=np.array([[0,0],[0,0]])
+
+R={'r1':A[0],'r2':A[1]}
+
+R # Örnek 8 de olduğu gibi bağımsız olan bir alt küme seçme şansı bulunmamaktadır. 
+
+# +
+# Örnek 12
+
+A=np.array([[1,1],[2,2]])
+
+R={'r1':A[0],'r2':A[1]}
+
+R['r1']*2-R['r2']==0
+
+# Dolasıyla r1 ile r2 doğrusal olarak bağımlıdır. 
+
+# Sonuç olarak sadece 1 adet vektör alabiliriz. A'nın rankı 1 dir.
+
+# +
+# Örnek 13
+
+A=np.array([[1,0],[0,1]])
+
+R={'r1':A[0],'r2':A[1]}
+
+R['r1']*2-R['r2']!=0
+
+# Dolasıyla r1 ile r2 doğrusal olarak bağımsızdır. 
+
+# A'nın rankı 2 dir.
+# -
+
+Örnek13=DoğrusalDenklem(np.array([[1],[0]]),np.array([[0],[1]]))
+
+Örnek13.denklem
+
+Örnek13.GaussJordan()
+
+# +
+# Örnek 14 Gauss Jordan ile Çözüm
+
+A=np.array([[1,0,0],[0,2,1],[0,2,3]])
+
+Örnek14=DoğrusalDenklem(A,np.array([[],[],[]]))
+
+Örnek14.denklem
+# -
+
+Örnek14.GaussJordan()
+
+# +
+# Rank A = Rank -A = 3
+# -
+
+# ## Vektör Kümesinin Doğrusal Bağımsız Olduğunu Nasıl Söyleriz ? 
+
+# V={v1,v2,v3,......,vk} vektörler kümesinin her bir vi elamanı bir matrisin satırı olduğunu farz edersek ve m adet satırı varsa, 
+# eğer bu matrisin rankı m' e eşitse doğrusal bağımsız , m 'den küçün ise doğrusal bağımlıdır.
+
+# +
+# Örnek 15 Doğrusal Bağımlı Vektörler
+
+A=np.array([[1,0,0],[0,1,0],[1,1,0]])
+
+Örnek15=DoğrusalDenklem(A,np.array([[],[],[]]))
+
+Örnek15.denklem
+# -
+
+Örnek15.GaussJordan()
+
+# +
+# Rank A = 2 , m=3 , dolasıyla doğrusal olarak bağımlıdır.
+# -
+
+# ## Problemler
+
+z=Örnek15.GaussJordan()
+
+# +
+# Soru 1 
+
+A=np.array([[1,0,1],[1,2,1],[2,2,2]])
+m=A.shape[0]
+n=A.shape[1]
+Empty=np.array([[]*n]*m) 
+soru=DoğrusalDenklem(A,Empty)
+
+# -
+
+soru.doğrusal_bağımsız()
+
+
+def rank_sayar(Ab):
+    say=0
+    satır_sayısı=Ab.shape[0]
+    for i in range(satır_sayısı):
+           if Ab[i][i]==1 and Ab[:,i].sum()==1:
+                say+=1
+    return say
+
+
+rank_sayısı=soru.rank_sayar()
+
+
+def doğrusal_bağımsız(Ab):
+    rank=rank_sayar(Ab)
+    m=Ab.shape[0]
+    if m==rank:
+        return True
+    elif m>rank:
+        return False
+    else:
+        return "Error"
+
+
+# +
+# Soru 2 
+
+A=np.array([[2,1,0],[1,2,0],[3,3,1]])
+m=A.shape[0]
+n=A.shape[1]
+Empty=np.array([[]*n]*m) 
+soru=DoğrusalDenklem(A,Empty)
+soru.doğrusal_bağımsız()
+# -
+
+soru.GaussJordan()
+
+# Soru 3 
+A=np.array([[2,1],[1,2]])
+def soru_çözer(A):
+    m=A.shape[0]
+    n=A.shape[1]
+    Empty=np.array([[]*n]*m) 
+    soru=DoğrusalDenklem(A,Empty)
+    print("Çözüm \n",soru.GaussJordan())
+    return print("Doğrusal bağımsız:",soru.doğrusal_bağımsız())
+
+
+soru_çözer(A)
+
+# Soru 4
+A=np.array([[2,0],[3,0]])
+soru_çözer(A)
+
+
+# Soru 5
+A=np.array([[1,2,3,4,5,6,7,8,9]])
+soru_çözer(A)
+
+# Soru 6
+A=np.array([[1,0,0,0,2,1,1,0,1]])
+soru_çözer(A)
+
+# +
+# Soru 7  ÇÖZÜM DE SORUN VAR!
+
+A=np.array([[1,2,3],[0,1,0],[1,1,0]])  
+b=np.array([[1],[5],[9]])
+# -
+
+soru7=DoğrusalDenklem(A,b)
+
+soru7.denklem
+
+soru7.GaussJordan()  
+
+v0=A[:,0];v1=A[:,1];v2=A[:,2]
+v0.shape=(3,1)
+v1.shape=(3,1)
+v2.shape=(3,1)
+
+c0=3;c1=5;c2=-4
+
+c0*v0+c1*v1+c2*v2==b # ÇÖZÜM DE SORUN VAR.
 
 
