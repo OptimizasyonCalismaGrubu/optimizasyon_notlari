@@ -787,6 +787,7 @@ class DoğrusalDenklem():
         # Adım 1 : A|b matrisini oluştur. 
 
         Ab=self.denklem.copy()
+        Ab=Ab.astype(float)
         satır_sayısı=Ab.shape[0]
         sutun_sayısı=Ab.shape[1]
 
@@ -1034,7 +1035,7 @@ v1=np.array([1,2]);v2=np.array([2,1])
 
 V=np.array([v1,v2])
 
-2*v1-v2==2*V[0]-V[1]  #1
+(2*v1-v2)==(2*V[0]-V[1])  #1
 
 2*V[0]-V[1]==np.array([0,3]) #1
 
@@ -1049,6 +1050,8 @@ np.array([1,2])+3*np.array([2,1])== 1*V[0]+3*V[1]  #2
 
 V=np.array([[0,0],[1,0],[0,1]])
 # -
+
+V
 
 c1=1;
 c1!=0
@@ -1206,9 +1209,9 @@ A=np.array([[1,0,0],[0,1,0],[1,1,0]])
 # Rank A = 2 , m=3 , dolasıyla doğrusal olarak bağımlıdır.
 # -
 
-# ## Problemler
-
 z=Örnek15.GaussJordan()
+
+# ## Problemler
 
 # +
 # Soru 1 
@@ -1304,8 +1307,297 @@ v0.shape=(3,1)
 v1.shape=(3,1)
 v2.shape=(3,1)
 
-c0=3;c1=5;c2=-4
+c0=3;c1=5;c2=-4 # Eski Çözüm !
 
-c0*v0+c1*v1+c2*v2==b # ÇÖZÜM DE SORUN VAR.
+c0*v0+c1*v1+c2*v2==b # ÇÖZÜM DE SORUN VAR. Gauss Jordan Metoduna denklemi float'a çeviren bir kod eklenmiştir. 
+
+# yeni çözüm
+çözüm=soru7.GaussJordan()[:,3]  
+
+
+c0=çözüm[0];c1=çözüm[1];c2=çözüm[2]
+
+c0*v0+c1*v1+c2*v2==b 
+
+# Soru 8 
+# 3 veya daha fazla 2 boyutlu vektörün doğrusal bağımlı olduğunu göstermek. 
+v0=[0,1]
+v1=[1,2]
+v2=[3,4]
+
+
+A=np.array([v0,v1,v2])
+
+
+A
+
+soru_çözer(A)
+
+# +
+# Rank A ile rank A'nın tersi birbirine eşit olma şansı yoktur. O yüzden gauss jordan hata vermektedir. 
+
+# +
+# Soru 9 
+v0=[0,1,0]
+v1=[1,2,3]
+v2=[2,4,6]
+
+A=np.array([v0,v1,v2])
+# -
+
+soru_çözer(A)
+
+# +
+# Bir satır diğerinin katı olduğu için gauss jordan işlemi sırasında diğerini yok etmektedir. 
+# -
+
+# # Matrisin Tersi
+
+# x*4=3 denkleminde iki tarafı da 4^-1 ile çarparak sonucu buluyoruz. Bu 0^-1 için geçerli değildir. Bu modeli genelleştirerek bilinmeyen sayısı ile denklem sayısının aynı olduğu durumlar için kullanacağız.
+
+# Kare matris satır ve sütün sayısı eşit olan matristir. 
+# Matristeki satır ve sütün numaraları aynı olan elemanlara diyagonal elemanlar denilir. 
+# Diyagonal elemanların hepsinin 1 ve diyagonal olmayan elemanların 0 olduğu matrise birim matris denilir. 
+
+I2=np.array([[1,0],[0,1]]);I2
+
+# <b>  Im * A= A * Im = A 'dir  </b>
+
+4*(1/4)==(1/4)*4
+
+4*(1/4)==1
+
+# Matrisler içinde mXm matrisler : <b> BA = AB = I ise , A^-1 = B </b>
+
+# +
+# Örnek 
+
+A=np.array([[2,0,-1],[3,1,2],[-1,0,1]])
+# -
+
+B=np.array([[1,0, 1],[-5,1,-7],[ 1,0,2]])
+
+A.dot(B)
+
+A_tersi=B
+
+A_tersi
+
+# <b> Ax=b -> (A^-1 * A) * x=A^-1 * b  -> Im * x=A^-1 * b -> x=A^-1 * b </b> 
+
+# Gauss Jordan A^-1 i bulmak için kullanılabilinir. 
+
+A=np.array([[2,5],[1,3]])
+
+A
+
+# A*A^-1=I
+
+
+I=np.array([[1,0],[0,1]])
+
+I
+
+A_tersi=np.array([['a','b'],['c','d']])
+
+I[0,:]
+
+A_tersi[:,0]
+
+# +
+# A*A_tersi[:,0] = I[0,:] A nın tersi ile çarpımında bilinmeyenleri aynı daha önce yaptığımız gibi Gauss Jordan ile bulabiliriz. 
+
+# +
+# A*A_tersi[:,1] = I[1,:]
+# -
+
+A
+
+I_ilk_sütün=I[:,0]
+
+I_ilk_sütün.shape=(2,1)
+
+Denklem_1=DoğrusalDenklem(A,I_ilk_sütün)
+
+Denklem_1.denklem
+
+A_Ters_İlk_Sütün=Denklem_1.GaussJordan()[:,2]
+
+A_Ters_İlk_Sütün
+
+I_İkinci_Sütün=I[:,1]
+
+I_İkinci_Sütün.shape=(2,1)
+
+Denklem_2=Denklem=DoğrusalDenklem(A,I_İkinci_Sütün)
+
+A_Ters_İkinci_Sütün=Denklem_2.GaussJordan()[:,2]
+
+A_Ters_İkinci_Sütün
+
+A_Ters=np.array([A_Ters_İlk_Sütün,A_Ters_İkinci_Sütün]).T
+
+A_Ters
+
+A_Ters.dot(A)
+
+
+def MatrisTersi(matris):
+    satır_sayısı=matris.shape[0]
+    sütün_sayısı=matris.shape[1]
+    
+    if satır_sayısı!=sütün_sayısı:
+        return 'Error : Satır sayısı sütün sayısı ile eşit değildir.'
+    else:
+        birim_matris= np.identity(satır_sayısı)
+        matris_ters_list=[]
+        for i in range(satır_sayısı):
+            birim_sütün=birim_matris[:,i]
+            birim_sütün.shape=(satır_sayısı,1)
+            denklem=DoğrusalDenklem(A,birim_sütün)
+            matris_ters_sütün=denklem.GaussJordan()[:,satır_sayısı]
+            matris_ters_list.append(matris_ters_sütün)
+        return np.array(matris_ters_list).T
+
+
+A_ters=MatrisTersi(A)
+
+
+A_ters
+
+# Daha kolayı
+np.linalg.inv(A) 
+
+np.linalg.matrix_rank(A)
+
+# ## Problemler
+
+# Soru 1
+A=np.array([[1,3],[2,5]]);np.linalg.inv(A) 
+
+# Soru 2
+A=np.array([[1,0,1],[4,1,-2],[3,1,-1]]);np.linalg.inv(A) 
+
+# Soru 3
+A=np.array([[1,0,1],[1,1,3],[2,1,2]]);np.linalg.inv(A) 
+
+# Soru 4
+A=np.array([[1,2,1],[1,2,0],[2,4,1]]);np.linalg.inv(A) 
+
+MatrisTersi(A)
+
+# Soru 5
+A=np.array([[1,3],[2,5]]);np.linalg.inv(A) 
+
+Çözüm=np.linalg.inv(A).dot(np.array([[4],[7]])) ;Çözüm
+
+A.dot(Çözüm)
+
+# +
+# Soru 6
+
+A=np.array([[1,0,1],[4,1,-2],[3,1,-1]]);
+# -
+
+Çözüm=np.linalg.inv(A).dot(np.array([[4],[0],[2]]))
+
+A.dot(Çözüm)
+
+# +
+# Soru 7 
+
+A=np.array([[1,2],[2,4]])
+boş_A=np.array([[]*A.shape[1]]*A.shape[0])
+Denklem=DoğrusalDenklem(A,boş_A)
+
+# -
+
+print('Doğrusal bağımsız:', Denklem.doğrusal_bağımsız())
+
+np.linalg.inv(Denklem.denklem)
+
+# Soru 8 
+# a
+B=np.array([[1,0,1],[4,1,-2],[3,1,-1]]);
+B_ters=np.linalg.inv(B)
+
+
+B
+
+B_ters
+
+B_ters=np.linalg.inv(B*100)
+
+B_ters
+
+# +
+# b
+
+B_=B.copy()
+B_[0,:]=B_[0,:]*2
+# -
+
+B_ters=np.linalg.inv(B)
+
+B__ters=B_ters.copy()
+
+B__ters[:,0]=B__ters[:,0]/2 # Satır daki değişiklik tersinde sütünda ve çarpma olarak tersi olarak görünür.
+
+B__ters
+
+np.linalg.inv(B_)
+
+# +
+# c
+
+B_=B.copy()
+B_[:,0]=B_[:,0]*2
+
+B__ters=B_ters.copy()
+
+B__ters[0,:]=B__ters[0,:]/2
+# -
+
+B__ters
+
+np.linalg.inv(B_)
+
+# +
+# Soru 9
+
+A=np.array([[ 1,  0,  1],
+       [ 4,  1, -2],
+       [ 3,  1, -1]])
+# -
+
+np.linalg.inv(A.T).round(2)
+
+np.linalg.inv(A).T.round(2)
+
+# +
+# A*A^1=I ise  A.T*A^-1.T == I.T  ==  (A*A^1).T
+
+#  A.T*A^-1.T  == (A*A^1).T
+# -
+
+A=np.array([[ 1/3, -2/3,  2/3],
+       [ 2/3,  2/3, 1/3],
+       [ -2/3,  1/3, 2/3]])
+
+# +
+# A^-1=A.T ise ortogonal matristir. 
+# -
+
+A.dot(A.T).round(2)
+
+A
+
+A.T
+
+np.linalg.inv(A)
+
+# +
+# Sütün ve satır birbirine eşittir.
+# -
 
 
