@@ -14,6 +14,9 @@
 #     name: python3
 # ---
 
+from IPython.core.display import display, HTML
+display(HTML("<style>.container { width:100% !important; }</style>"))
+
 # + pycharm={"is_executing": false}
 import pandas as pd
 import numpy as np
@@ -857,10 +860,6 @@ class DoğrusalDenklem():
 
 
 
-
-
-
-
 # ##  Ana Değişkenler ve Doğrusal Denklemlerde Çözümleri 
 
 # <i> Doğrusal denklem sistemlerini çözdükten sonra eğer bir satırda sadece bir sütünda 1 katsayısı var ve diğer sütünların katsayıları 0 ise bu değişkene <b> esas değişken (BV) </b>  denir.   </i>  <i> Aksi durumdaki değişkenler <b>  esas olmayan  (NBV)</b>  değişkenlerdir  .   </i>
@@ -1575,9 +1574,14 @@ np.linalg.inv(A.T).round(2)
 np.linalg.inv(A).T.round(2)
 
 # +
+# Soru 10 
 # A*A^1=I ise  A.T*A^-1.T == I.T  ==  (A*A^1).T
 
 #  A.T*A^-1.T  == (A*A^1).T
+
+# +
+# Soru 11
+# Sütün ve satır birbirine eşittir.
 # -
 
 A=np.array([[ 1/3, -2/3,  2/3],
@@ -1596,8 +1600,237 @@ A.T
 
 np.linalg.inv(A)
 
+# # Determinant
+#
+
+
+#  Herhangi bir kare matrisi belirleyen sayıya determinant denir. Doğrusal olmayan programlama çalışmalarında kullanılacaktır .
+
+
+# A= [a11] det A -> a11
+    
+
 # +
-# Sütün ve satır birbirine eşittir.
+# A =[[a11 a12],[a21 a22]]  det A -> a11*a22 - a21*a12
+# -
+
+A=np.array([[2,4],[3,5]])
+
+2*5-3*4
+
+np.linalg.det(A)
+
+A=np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+A
+
+A02=A[1:,:2]
+
+A02
+
+
+# Bir matrisin alt matrisi ona ait sütün ve satırların silinmesi ile yazılır.
+
+def alt_matris(A,i,j):    
+    a_del = np.delete(A, i, 0)
+    a_del=np.delete(a_del, j, 1)
+    
+    return a_del
+
+
+# +
+def determinant_hesaplayıcı(A,i=0):
+    if (A.shape!=(1,)):
+        if (A.shape[0] != A.shape[1]) :
+            return "Hata: Kare matris değildir."
+    m=A.shape[0]
+    if m==1:
+       detA= A[0]  
+       return detA
+    else:
+        detA=0
+        for j in range(m):
+            detA+=np.power(-1,i+j)*A[i,j]*determinant_hesaplayıcı(alt_matris(A,i,j))
+            
+    return detA.item(0)
+    
+
+
+
+
+
+
+
+
+# -
+
+determinant_hesaplayıcı(A,i=0)
+
+A.item(0)
+
+A=np.array([[2,4],[3,5]])
+determinant_hesaplayıcı(A,i=0)
+
+# ## Problemler
+
+# Soru 1
+A=np.array([[1,2,3],[4,5,6],[7,8,9]])
+
+
+A[1,:]
+
+determinant_hesaplayıcı(A,i=1) # 2. satır için
+
+determinant_hesaplayıcı(A,i=2) # 3. satır için
+
+A=np.array([[1,2,3],[6,5,3],[7,15,9]])
+
+np.linalg.det(A)
+
+determinant_hesaplayıcı(A,i=0) # 3. satır için
+
+determinant_hesaplayıcı(A,i=1)
+
+determinant_hesaplayıcı(A,i=0)
+
+# +
+# Soru 2
+
+A=np.array([[1,0,0,0],[0,2,0,0],[0,0,3,0],[0,0,0,5]])
+determinant_hesaplayıcı(A,i=0)
+# -
+
+np.linalg.det(A)
+
+# +
+# Soru 3
+
+# i>j and aij=0
+
+A=np.array([[1,2,3],[0,2,2],[0,0,1]])
+# -
+
+A
+
+np.linalg.det(A)
+
+determinant_hesaplayıcı(A,i=0)
+
+np.prod(np.diagonal(A))
+
+# Soru 4
+# a
+A=np.array([3])
+determinant_hesaplayıcı(-A,i=0)
+
+-determinant_hesaplayıcı(A,i=0)
+
+A=np.array([[1,2,3],[0,2,2],[0,0,1]])
+determinant_hesaplayıcı(-A,i=0)
+
+-determinant_hesaplayıcı(A,i=0)
+
+# b
+A=np.array([[1,2],[0,2]])
+determinant_hesaplayıcı(-A,i=0)
+
+
+determinant_hesaplayıcı(A,i=0)
+
+A=np.array([[1,2,3,11],[0,2,2,3],[0,0,1,9],[0,2,2,5]])
+determinant_hesaplayıcı(-A,i=0)
+
+determinant_hesaplayıcı(A,i=0)
+
+# +
+# 1-> m e kadar elemanı topladığımız için ve (-1) üzeri (i) ile çarptığımız için m sayısının çift tek olması yüzünden bu durum değişmektedir. 
+# -
+
+# # Review Problems
+
+# Soru 1
+A=np.array([[1,1,0],[0,1,1],[1,2,1]])
+b=np.array([[2],[3],[5]])
+soru1=DoğrusalDenklem(A,b)
+
+soru1.GaussJordan()
+
+np.linalg.solve(A,b)
+
+# +
+# Soru 2
+
+A=np.array([[0,3],[2,1]])
+# -
+
+np.linalg.inv(A)
+
+MatrisTersi(A)
+
+# Soru 3
+
+
+# +
+U=[20,5,75] # t ,q ,r
+
+T=[90,10]  # r , q
+
+[Ut Tt] -> [U T]
+
+U *.75 = Ut
+
+T*0.9+U*0.20=Tt
+ U    T
+[0.75 0 ] =Ut
+[0.2  0.90 ]=Tt
+# -
+
+# Soru 4
+
+
+A=np.array([[2,3],[1,1],[1,2]])
+b=np.array([[3],[1],[2]])
+soru4=DoğrusalDenklem(A,b)
+
+
+soru4.GaussJordan()
+
+np.linalg.solve(A,b)
+
+# Soru 5
+
+
+np.linalg.inv(np.array([[0,2],[1,3]]))
+
+# Soru 6
+
+
+grades=np.array([[3.6 ,3.8 ,2.6,3.4],[2.7 ,3.1, 2.9, 3.6]])
+
+courses=np.array([4,4,3,3])
+
+grades.dot(courses)/courses.sum()
+
+# +
+# Soru 7
+# -
+
+A=np.array([[2,1],[3,1],[1,-1]])
+b=np.array([[3],[4],[0]])
+soru7=DoğrusalDenklem(A,b)
+
+soru7.GaussJordan()
+
+A=np.array([[2,1],[4,0]])
+b=np.array([[3],[4]])
+soru7=DoğrusalDenklem(A,b)
+
+soru7.GaussJordan()
+
+# +
+# Soru 8 
+
+np.linalg.inv([[2,3],[3,5]])
 # -
 
 
