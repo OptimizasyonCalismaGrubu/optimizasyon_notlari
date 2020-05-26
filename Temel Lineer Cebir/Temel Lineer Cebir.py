@@ -765,7 +765,6 @@ class DoğrusalDenklem():
         self.denklem=np.concatenate((A,b),axis=1)
         self.satır_sayısı=self.denklem.shape[0]
         self.sütün_sayısı=self.denklem.shape[1]
-        print("{n} bilinmeyenli doğrusal denklem sistemi oluşturulmuştur.".format(n=A.shape[1],Ab=self.denklem))
     
     def __str__(self):
         return "Denklem sistemi ----> \n {Ab}".format(Ab=self.denklem)
@@ -821,7 +820,6 @@ class DoğrusalDenklem():
         
         for i in range(satır_sayısı):      
             if all(çözüm[i,:sutun_sayısı-1]==0) and çözüm[i,sutun_sayısı-1]!=0:
-                print("Denklem Kümesi Çözümsüzdür.")
                 return "çözümsüz"  
         
         if satır_sayısı==(sutun_sayısı-1):
@@ -831,10 +829,8 @@ class DoğrusalDenklem():
 
             if i==satır_sayısı:
                 tekÇözüm=True
-                print("Denklem Kümesinin Tek Çözümü mevcuttur.")
                 return "tek"
         else:
-            print("Denklem Kümesinin Sonsuz Çözümü mevcuttur.")
             return "sonsuz"
         
     def rank_sayar(self):
@@ -1285,7 +1281,7 @@ A=np.array([[1,2,3,4,5,6,7,8,9]])
 soru_çözer(A)
 
 # Soru 6
-A=np.array([[1,0,0,0,2,1,1,0,1]])
+A=np.array([[1,0,0,0,2,1,1,0,1]])  
 soru_çözer(A)
 
 # +
@@ -1301,10 +1297,14 @@ soru7.denklem
 
 soru7.GaussJordan()  
 
+soru7.çözüm_durumu()
+
 v0=A[:,0];v1=A[:,1];v2=A[:,2]
 v0.shape=(3,1)
 v1.shape=(3,1)
 v2.shape=(3,1)
+
+v0
 
 c0=3;c1=5;c2=-4 # Eski Çözüm !
 
@@ -1316,7 +1316,15 @@ c0*v0+c1*v1+c2*v2==b # ÇÖZÜM DE SORUN VAR. Gauss Jordan Metoduna denklemi flo
 
 c0=çözüm[0];c1=çözüm[1];c2=çözüm[2]
 
-c0*v0+c1*v1+c2*v2==b 
+A
+
+b
+
+v0
+
+çözüm
+
+c0*v0+c1*v1+(-13/3)*v2==b 
 
 # Soru 8 
 # 3 veya daha fazla 2 boyutlu vektörün doğrusal bağımlı olduğunu göstermek. 
@@ -1334,6 +1342,9 @@ soru_çözer(A)
 
 # +
 # Rank A ile rank A'nın tersi birbirine eşit olma şansı yoktur. O yüzden gauss jordan hata vermektedir. 
+# -
+
+np.linalg.solve(A,np.array([[0],[0],[0]]))
 
 # +
 # Soru 9 
@@ -1349,6 +1360,8 @@ soru_çözer(A)
 # +
 # Bir satır diğerinin katı olduğu için gauss jordan işlemi sırasında diğerini yok etmektedir. 
 # -
+
+np.linalg.solve(A,np.array([[0],[0],[0]]))
 
 # # Matrisin Tersi
 
@@ -1414,7 +1427,12 @@ A
 
 I_ilk_sütün=I[:,0]
 
+I_ilk_sütün
+
 I_ilk_sütün.shape=(2,1)
+
+I_ilk_sütün
+
 
 Denklem_1=DoğrusalDenklem(A,I_ilk_sütün)
 
@@ -1511,6 +1529,10 @@ Denklem=DoğrusalDenklem(A,boş_A)
 
 # -
 
+Denklem.denklem
+
+Denklem.GaussJordan()
+
 print('Doğrusal bağımsız:', Denklem.doğrusal_bağımsız())
 
 np.linalg.inv(Denklem.denklem)
@@ -1536,7 +1558,13 @@ B_=B.copy()
 B_[0,:]=B_[0,:]*2
 # -
 
+B_
+
 B_ters=np.linalg.inv(B)
+
+B_ters
+
+B_ters=np.linalg.inv(B_);B_ters
 
 B__ters=B_ters.copy()
 
@@ -1548,7 +1576,8 @@ np.linalg.inv(B_)
 
 # +
 # c
-
+B=np.array([[1,0,1],[4,1,-2],[3,1,-1]]);
+B_ters=np.linalg.inv(B)
 B_=B.copy()
 B_[:,0]=B_[:,0]*2
 
@@ -1569,7 +1598,19 @@ A=np.array([[ 1,  0,  1],
        [ 3,  1, -1]])
 # -
 
-np.linalg.inv(A.T).round(2)
+A
+
+np.linalg.inv(A)
+
+B=np.array([[ 1,  0,  1],
+       [ 3,  1, -2],
+       [ 3,  1, -1]])
+
+np.linalg.inv(B)
+
+np.linalg.inv(A.dot(B))
+
+np.linalg.inv(B).dot(np.linalg.inv(A))
 
 np.linalg.inv(A).T.round(2)
 
@@ -1608,7 +1649,7 @@ np.linalg.inv(A)
 
 
 # A= [a11] det A -> a11
-    
+
 
 # +
 # A =[[a11 a12],[a21 a22]]  det A -> a11*a22 - a21*a12
@@ -1819,7 +1860,9 @@ A=np.array([[2,1],[3,1],[1,-1]])
 b=np.array([[3],[4],[0]])
 soru7=DoğrusalDenklem(A,b)
 
-soru7.GaussJordan()
+np.linalg.solve(A,b)
+
+soru7.çözüm_durumu()
 
 A=np.array([[2,1],[4,0]])
 b=np.array([[3],[4]])
@@ -1831,6 +1874,225 @@ soru7.GaussJordan()
 # Soru 8 
 
 np.linalg.inv([[2,3],[3,5]])
+# +
+# Soru 9
+
+Ct - %5 adult %1 die  
+At -  %3 die 
 # -
+
+
+insan_t=[Ct,At]*[[94,0],[5,97]]
+
+      CT   AT
+Ct+1  94   0
+At+1   5   97
+    
+
+insan_t=np.array([100,100])
+olaylar=np.array([[.94,.05],[0,.97]])
+
+insan_t.dot(olaylar)
+
+olaylar
+
+# +
+# Soru 10
+
+A=np.array([[1,0,-1],[0,1,1],[1,1,0]])
+b=np.array([[4],[2],[5]])
+soru10=DoğrusalDenklem(A,b)
+# -
+
+soru10.GaussJordan()
+
+np.linalg.solve(A,b)
+
+# +
+# Soru 11
+soru11=np.array([[1,0,2],[0,1,1],[0,1,1]])
+
+MatrisTersi(soru11)
+# -
+
+np.linalg.inv(soru11)
+
+# +
+# Soru 12
+
+     Rt0 Ct0
+Rt1  90   20
+Ct1  10   80
+# -
+
+değişim=np.array([[.90,.10],[.20,.80]])
+
+cars_t0=np.array([100,100])
+cars_t0.dot(değişim)
+
+Rt0=100;Ct0=100
+
+Rt1=.90*Rt0+.20*Ct0 
+Ct1=.10*Rt0+.80*Ct0
+
+
+
+print('Rt1 : {}  Ct1 : {}'.format(Rt1,Ct1))
+
+# +
+# Soru 13
+
+A=np.array([[1,2,1],[2,0,0]])
+def soru_çözer(A):
+    m=A.shape[0]
+    n=A.shape[1]
+    Empty=np.array([[]*n]*m) 
+    soru=DoğrusalDenklem(A,Empty)
+    print("Çözüm \n",soru.GaussJordan())
+    return print("Doğrusal bağımsız:",soru.doğrusal_bağımsız())
+
+
+# -
+
+soru_çözer(A)
+
+# Soru 14
+A=np.array([[1,0,0],[0,1,0],[-1,-1,0]])
+soru_çözer(A)
+
+# Soru 15
+a=1
+b=2
+c=3
+d=1/100
+A=np.array([[a,0,0,0],[0,b,0,0],[0,0,c,0],[0,0,0,d]])
+
+np.linalg.inv(A)
+
+MatrisTersi(A)
+
+a^-1 , ...., d^-1
+
+A.dot(np.linalg.inv(A))
+
+
+
+# Soru 16
+A=np.array([[1,1,0,0],[0,0,1,1],[1,0,1,0],[0,1,0,1]])
+B=np.array([[2],[3],[4],[1]])
+
+np.linalg.inv(A)
+
+A.dot(X)=B
+
+s16=DoğrusalDenklem(A,B)
+
+s16.GaussJordan()
+
+# Soru 17
+  b  s  f
+b      
+s 0. 
+f   
+ 
+
+ (x)*0.05=s0
+ (x-s0)*0.4=f0
+(x-s0-f0)*0.05=b0
+   (x-b0)*0.05=s1
+   (x-s1)*0.4=f1
+
+f1=(x-((x-((x-(x*0.05)-((x-(x*0.05))*0.4))*0.05))*0.05))*0.4
+
+# Soru 18
+A=np.array([[2,4,6],[1,0,0],[0,0,1]])
+determinant_hesaplayıcı(A,i=0)
+
+
+np.linalg.det(A)
+
+# Soru 19
+A=np.array([[a,b],[c,d]])
+
+a=1
+b=2
+c=2
+d=4
+
+a*d-b*c==0
+
+
+np.linalg.det(A)
+
+np.linalg.inv(A)
+
+# +
+# Soru 20
+
+ax=0
+
+# -
+
+a*x1+b*x2=0
+c*x1+d*x2=0
+
+a=1
+b=2
+c=3
+d=1/100
+A=np.array([[a,0,0,0],[0,b,0,0],[0,0,c,0],[0,0,0,d]])
+B=np.array([[ 0],[0 ],[0 ],[0 ]])
+
+m=A.shape[0]
+n=A.shape[1]
+Empty=np.array([[]*n]*m) 
+soru=DoğrusalDenklem(A,Empty)
+
+np.linalg.solve(A,B)*
+
+# +
+# Soru 21
+
+X=np.array([1, 0  , 0  , 0  ])
+# -
+
+A=np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
+
+X.dot(A)
+
+# +
+# Soru 22
+
+ds  dc   dm 
+30 15  40  1 s
+45 20  10  1 c
+40 10  45  1 m
+
+
+
+
+# -
+
+A=np.array([[.3,.45,.40],[.15,.20,.10],[.40,.10,.45]])
+
+A
+
+scm=np.array([1,1,1])
+
+scm=np.array([1,1,1])
+
+sales=np.array([2,1,1])
+
+sales= scm-A.dot(scm) 
+
+satış=üretim-stok
+
+z=(np.identity(3)-A)
+
+scm=np.linalg.inv(z).dot(sales)
+
+z.dot(scm)
+
+scm
 
 
