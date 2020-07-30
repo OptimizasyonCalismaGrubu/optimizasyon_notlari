@@ -1,0 +1,12 @@
+prefix=/c/projects/cbc/COIN/build
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/coin
+
+Name: OsiUnitTests
+Description: COIN-OR Open Solver Interface Common Unit Tests
+URL: https://projects.coin-or.org/Osi
+Version: trunk
+Libs: -L${libdir} -lOsiCommonTests
+Cflags: -I${includedir}
+Requires: osi
